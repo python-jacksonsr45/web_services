@@ -12,3 +12,8 @@ class Client:
         self, request: ClientRequest, presenter: ClientPresenterInterface
     ):
         presenter.present(ClientResponse(self.client_interface.insert_client(request)))
+
+    def update_client_registration(
+        self, request: ClientRequest, presenter: ClientPresenterInterface
+    ):
+        presenter.present(ClientResponse(self.client_interface.update_client(request)))

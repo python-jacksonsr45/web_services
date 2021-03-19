@@ -27,6 +27,12 @@ class ClientRepository(ClientInterface):
             user=request.user, address=request.address, profile=request.profile
         )
 
+    @classmethod
+    def update_client(cls, request: ClientRequest):
+        return ClientEntity(
+            user=request.user, address=request.address, profile=request.profile
+        )
+
 
 client_interface: ClientInterface = ClientRepository
 client = Client(client_interface)
@@ -76,29 +82,20 @@ def test_new_client_registration():
 
     new_client = presenter.get_client_view_model()
 
-    assert new_client.id != ""
+    assert new_client.id is not None
+    assert new_client.user == user
+    assert new_client.address == address
+    assert new_client.profile == profile
     assert new_client.created_at is not None
     assert new_client.updated_at is not None
-    assert new_client.user.id != ""
-    assert new_client.user.created_at is not None
-    assert new_client.user.updated_at is not None
-    assert new_client.user.username == username
-    assert new_client.user.password == password
-    assert new_client.user.email == email
-    assert new_client.profile.id != ""
-    assert new_client.profile.created_at is not None
-    assert new_client.profile.updated_at is not None
-    assert new_client.profile.name == name
-    assert new_client.profile.last_name == last_name
-    assert new_client.profile.document_id == document_id
-    assert new_client.profile.phone == phone
-    assert new_client.profile.mobile_phone == mobile_phone
-    assert new_client.address.id != ""
-    assert new_client.address.created_at is not None
-    assert new_client.address.updated_at is not None
-    assert new_client.address.country == country
-    assert new_client.address.state == state
-    assert new_client.address.zip_code == zip_code
-    assert new_client.address.neighborhood == neighborhood
-    assert new_client.address.street == street
-    assert new_client.address.number == number
+
+
+def test_update_client_registration():
+    """ Should be updating client registration and compare result """
+
+    client_request.user.username = "test123456"
+    client.update_client_registration(client_request, presenter)
+
+    new_client = presenter.get_client_view_model()
+
+    assert new_client.user.username == "test123456"
