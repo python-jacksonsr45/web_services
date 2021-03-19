@@ -17,3 +17,10 @@ class Client:
         self, request: ClientRequest, presenter: ClientPresenterInterface
     ):
         presenter.present(ClientResponse(self.client_interface.update_client(request)))
+
+    def find_client_registration_by_id(
+        self, client_id: str, presenter: ClientPresenterInterface
+    ):
+        presenter.present(
+            ClientResponse(self.client_interface.find_client_by_id(client_id))
+        )

@@ -1,4 +1,5 @@
 from faker import Faker
+import uuid
 from domain.src.request import ClientRequest
 from domain.src.response import ClientResponse
 from domain.src.use_cases import Client
@@ -13,11 +14,18 @@ class ClientPresenter(ClientPresenterInterface):
 
     def present(self, response: ClientResponse):
         self.client_user_view = ClientEntity(
-            user=response.user, address=response.address, profile=response.profile
+            client_id=response.client_id,
+            user=response.user,
+            address=response.address,
+            profile=response.profile,
         )
 
     def get_client_view_model(self) -> ClientEntity:
         return self.client_user_view
+
+
+presenter: ClientPresenterInterface = ClientPresenter()
+faker = Faker()
 
 
 class ClientRepository(ClientInterface):
@@ -33,11 +41,19 @@ class ClientRepository(ClientInterface):
             user=request.user, address=request.address, profile=request.profile
         )
 
+    @classmethod
+    def find_client_by_id(cls, client_id):
+        request = presenter.get_client_view_model()
+        return ClientEntity(
+            client_id=client_id,
+            user=request.user,
+            address=request.address,
+            profile=request.profile,
+        )
+
 
 client_interface: ClientInterface = ClientRepository
 client = Client(client_interface)
-presenter: ClientPresenterInterface = ClientPresenter()
-faker = Faker()
 
 username = "user_test"
 password = faker.password()
@@ -82,7 +98,7 @@ def test_new_client_registration():
 
     new_client = presenter.get_client_view_model()
 
-    assert new_client.id is not None
+    assert new_client.client_id is not None
     assert new_client.user == user
     assert new_client.address == address
     assert new_client.profile == profile
@@ -99,3 +115,17 @@ def test_update_client_registration():
     new_client = presenter.get_client_view_model()
 
     assert new_client.user.username == "test123456"
+
+
+def test_find_client_registration_by_id():
+    """ Should be find client registration by id and compare result """
+
+    client_id = str(uuid.uuid4())
+    client_request.client_id = client_id
+    client.new_client_registration(client_request, presenter)
+
+    client.find_client_registration_by_id(client_id=client_id, presenter=presenter)
+
+    result = presenter.get_client_view_model()
+
+    assert result.client_id == client_id
