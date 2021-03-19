@@ -42,10 +42,15 @@ def test_new_user_registration():
 
     name = "user"
     last_name = "test"
+    document_id = "123456789"
     phone = "15321654"
     mobile_phone = "4561235465"
     profile = ProfileEntity(
-        name=name, last_name=last_name, phone=phone, mobile_phone=mobile_phone
+        name=name,
+        last_name=last_name,
+        phone=phone,
+        mobile_phone=mobile_phone,
+        document_id=document_id,
     )
 
     country = "Brasil"
@@ -69,13 +74,26 @@ def test_new_user_registration():
 
     new_client = presenter.get_client_view_model()
 
+    assert new_client.id != ""
+    assert new_client.created_at is not None
+    assert new_client.updated_at is not None
+    assert new_client.user.id != ""
+    assert new_client.user.created_at is not None
+    assert new_client.user.updated_at is not None
     assert new_client.user.username == username
     assert new_client.user.password == password
     assert new_client.user.email == email
+    assert new_client.profile.id != ""
+    assert new_client.profile.created_at is not None
+    assert new_client.profile.updated_at is not None
     assert new_client.profile.name == name
     assert new_client.profile.last_name == last_name
+    assert new_client.profile.document_id == document_id
     assert new_client.profile.phone == phone
     assert new_client.profile.mobile_phone == mobile_phone
+    assert new_client.address.id != ""
+    assert new_client.address.created_at is not None
+    assert new_client.address.updated_at is not None
     assert new_client.address.country == country
     assert new_client.address.state == state
     assert new_client.address.zip_code == zip_code
