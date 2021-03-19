@@ -8,7 +8,7 @@ class Client:
     def __init__(self, client_interface: ClientInterface):
         self.client_interface = client_interface
 
-    def new_user_registration(
+    def new_client_registration(
         self, request: ClientRequest, presenter: ClientPresenterInterface
     ):
         presenter.present(ClientResponse(self.client_interface.insert_client(request)))
