@@ -8,6 +8,7 @@ class ProfileEntity:
         profile_id: str = None,
         name: str = None,
         last_name: str = None,
+        document_id: str = None,
         phone: str = None,
         mobile_phone: str = None,
         created_at: str = None,
@@ -18,6 +19,7 @@ class ProfileEntity:
             self.id = profile_id
         self.name = name
         self.last_name = last_name
+        self.document_id = document_id
         self.phone = phone
         self.mobile_phone = mobile_phone
         if not created_at:
@@ -33,6 +35,9 @@ class ProfileEntity:
         return self.name
 
     def get_last_name(self) -> str:
+        return self.last_name
+
+    def get_document_id(self) -> str:
         return self.last_name
 
     def get_phone(self) -> str:

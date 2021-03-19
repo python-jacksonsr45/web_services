@@ -12,10 +12,10 @@ class ClientEntity:
         address: AddressEntity = None,
         created_at: datetime = None,
     ):
-        if not client_id:
-            self.id = str(uuid.uuid4())
+        if client_id is not None:
+            self.client_id = client_id
         else:
-            self.id = client_id
+            self.client_id = str(uuid.uuid4())
         self.user = user
         self.profile = profile
         self.address = address
